@@ -1,1 +1,1 @@
-# vaultwarden_self-hosted
+# vaultwarden_self-hosted_on_vps
