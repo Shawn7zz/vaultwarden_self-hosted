@@ -60,7 +60,7 @@ services:
       - NET_ADMIN
       - NET_RAW
     environment:
-      - COUNTRIES=CN HK AU
+      - COUNTRIES=
       - COUNTRYBLOCK_SCHEDULE=0 3 * * *
       - TZ=America/New_York
     command: >
