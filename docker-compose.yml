@@ -60,9 +60,9 @@ services:
       - NET_ADMIN
       - NET_RAW
     environment:
-      - COUNTRIES=CN HK AU
-      - COUNTRYBLOCK_SCHEDULE=0 3 * * *
-      - TZ=America/New_York
+      - COUNTRIES=
+      - COUNTRYBLOCK_SCHEDULE=
+      - TZ=
     command: >
       sh -c 'apk --update --no-cache add ipset iptables ip6tables wget bash tzdata &&
              ln -sf /proc/1/fd/1 /var/log/block.log &&
@@ -80,7 +80,7 @@ services:
     command: watchtower vaultwarden caddy vaultwarden-backup
     environment:
     - WATCHTOWER_CLEANUP=true
-    - WATCHTOWER_SCHEDULE=10 6 * * *
+    - WATCHTOWER_SCHEDULE=
     - WATCHTOWER_DEBUG=true
     - WATCHTOWER_NOTIFICATIONS=email
     - WATCHTOWER_NOTIFICATION_EMAIL_FROM=
@@ -100,13 +100,13 @@ services:
     environment:
       - RCLONE_REMOTE_NAME=VaultwardenBackup
       - RCLONE_REMOTE_DIR=/VaultwardenBackup
-      - CRON=10 5 * * *
+      - CRON=
       - ZIP_ENABLE=TRUE
       - ZIP_PASSWORD=
       - ZIP_TYPE=zip
       - BACKUP_KEEP_DAYS=30
       - PING_URL=
-      - TIMEZONE=America/New_York
+      - TIMEZONE=
     volumes:
       - vaultwarden-data:/bitwarden/data/
       - vaultwarden-rclone-data:/config/
