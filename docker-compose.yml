@@ -13,7 +13,7 @@ services:
       - vaultwarden-data:/data
 
   caddy:
-    image: caddy:2
+    image: caddy:latest
     container_name: caddy
     restart: always
     ports:
@@ -31,8 +31,8 @@ services:
   
   fail2ban:
     image: crazymax/fail2ban:latest
-    restart: always
     container_name: fail2ban
+    restart: always
     volumes:
       - ./fail2ban:/data
       - vaultwarden-data:/vaultwarden:ro
@@ -50,8 +50,8 @@ services:
 
   countryblock:
     image: alpine:latest
-    restart: always
     container_name: countryblock
+    restart: always
     volumes:
       - ./countryblock/block.sh:/block.sh:ro
     network_mode: "host"
@@ -60,7 +60,7 @@ services:
       - NET_ADMIN
       - NET_RAW
     environment:
-      - COUNTRIES=
+      - COUNTRIES=CN HK AU
       - COUNTRYBLOCK_SCHEDULE=0 3 * * *
       - TZ=America/New_York
     command: >
@@ -71,9 +71,31 @@ services:
              crond -d 8 &&
              bash /block.sh start'    
 
+  watchtower:
+    image: containrrr/watchtower
+    container_name: watchtower
+    restart: always
+    volumes:
+    - /var/run/docker.sock:/var/run/docker.sock
+    command: watchtower vaultwarden caddy vaultwarden-backup
+    environment:
+    - WATCHTOWER_CLEANUP=true
+    - WATCHTOWER_SCHEDULE=10 6 * * *
+    - WATCHTOWER_DEBUG=true
+    - WATCHTOWER_NOTIFICATIONS=email
+    - WATCHTOWER_NOTIFICATION_EMAIL_FROM=
+    - WATCHTOWER_NOTIFICATION_EMAIL_TO=
+    - WATCHTOWER_NOTIFICATION_EMAIL_SERVER=
+    - WATCHTOWER_NOTIFICATION_EMAIL_SERVER_PORT=
+    - WATCHTOWER_NOTIFICATION_EMAIL_SERVER_USER=
+    - WATCHTOWER_NOTIFICATION_EMAIL_SERVER_PASSWORD=
+    - WATCHTOWER_NOTIFICATION_EMAIL_DELAY=10
+    - TZ=
+
 
   backup:
     image: ttionya/vaultwarden-backup:latest
+    container_name: vaultwarden-backup
     restart: always
     environment:
       - RCLONE_REMOTE_NAME=VaultwardenBackup
@@ -95,4 +117,3 @@ volumes:
   vaultwarden-rclone-data:
     external: true
     name: vaultwarden-rclone-data
-
